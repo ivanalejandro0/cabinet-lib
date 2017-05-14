@@ -5,6 +5,7 @@ import os
 from cabinet.auth import Auth
 from cabinet.vault import Vault
 from cabinet.person import Person
+from cabinet.item import Item
 
 BASE_PATH = os.path.join(os.path.expanduser('~'), '.config', 'cabinet')
 CONFIG_PATH = os.path.join(BASE_PATH, 'secrets')
@@ -53,6 +54,10 @@ class Cabinet:
     def get_all(self):
         return self._vault.get_all()
 
+    def get_item(self, name):
+        data = self._vault.get(name)
+        return Item(data['name'], data['content'], data['tags'])
+
     def get(self, name):
         return self._vault.get(name)
 
@@ -89,9 +94,7 @@ class Cabinet:
         }
 
         name and content are mandatory, tags can be None.
-
         """
-
         name = item['name']
         content = item['content']
         tags = item.get('tags')
